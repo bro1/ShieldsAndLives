@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Random;
 
 import nz.theysay.shieldsandlives.databinding.FragmentFirstBinding;
@@ -43,7 +45,26 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
 
                 if (step == true) {
+
+                    String txt = binding.editText.getText().toString();
+                    int z =0;
+                    try {
+                        z = Integer.parseInt(txt);
+                    } catch (NumberFormatException e) {
+                        // ignore, we'll just use -11111
+                        z = -11111;
+                    }
+
+                    if (z != f*s) {
+                        Snackbar.make(view, "No!!! Ha ha ha!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+
+                        return;
+                    }
+
                     binding.textviewFirst.setText(w + " " + f + " x " + s + " =  " + f*s);
+                    binding.editText.setVisibility(View.INVISIBLE);
+                    binding.buttonFirst.setText("Next");
 
                     if(w.equals("Life ♡")) {
                         lives = lives - 1;
@@ -54,14 +75,11 @@ public class FirstFragment extends Fragment {
                         }
                         binding.textviewLives.setText(livesText);
 
-
-
                     }
 
                     step = false;
                     return;
                 }
-
 
                 Random r  = new Random();
                 int first = r.nextInt(11);
@@ -82,10 +100,13 @@ public class FirstFragment extends Fragment {
                 w = what;
                 step = true;
 
-                binding.textviewFirst.setText(what + " " + first + " x " + second + " =  ???");
+                binding.textviewFirst.setText(what + " " + first + " x " + second + " = ");
 
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_Fir stFragment_to_SecondFragment);
+                binding.editText.setVisibility(View.VISIBLE);
+                binding.editText.setText("");
+                binding.editText.requestFocus();
+                binding.buttonFirst.setText("I know the answer");
+
             }
         });
     }
